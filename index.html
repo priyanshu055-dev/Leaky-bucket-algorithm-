@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaky Bucket Algorithm Simulator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <main class="container">
+        <header>
+            <h1>Leaky Bucket <span>Simulator</span></h1>
+            <p>Visualizing Network Traffic Control</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Controls Section -->
+            <section class="card controls">
+                <h2><i class="icon-settings"></i> Configuration</h2>
+                <div class="control-group">
+                    <label for="arrivalRate">Arrival Rate (packets/sec)</label>
+                    <input type="range" id="arrivalRate" min="0" max="20" step="1" value="5">
+                    <span class="value-display" id="arrivalRateVal">5</span>
+                </div>
+                <div class="control-group">
+                    <label for="bucketCapacity">Bucket Capacity</label>
+                    <input type="range" id="bucketCapacity" min="5" max="100" step="5" value="50">
+                    <span class="value-display" id="bucketCapacityVal">50</span>
+                </div>
+                <div class="control-group">
+                    <label for="leakRate">Leak Rate (packets/sec)</label>
+                    <input type="range" id="leakRate" min="1" max="20" step="1" value="3">
+                    <span class="value-display" id="leakRateVal">3</span>
+                </div>
+                <div class="button-group">
+                    <button id="startBtn" class="btn primary">Start</button>
+                    <button id="pauseBtn" class="btn secondary" disabled>Pause</button>
+                    <button id="resetBtn" class="btn outline">Reset</button>
+                </div>
+            </section>
+
+            <!-- Visualization Section -->
+            <section class="card visualization">
+                <div class="bucket-container">
+                    <div id="incomingPackets" class="packet-stream incoming"></div>
+                    <div class="bucket-wrapper">
+                        <div id="bucket" class="bucket">
+                            <div id="bucketFill" class="bucket-fill"></div>
+                            <div id="droppedPackets" class="packet-stream dropped"></div>
+                        </div>
+                        <div class="bucket-label">Bucket Level: <span id="currentLevelText">0</span> / <span id="maxCapacityText">50</span></div>
+                    </div>
+                    <div id="outgoingPackets" class="packet-stream outgoing"></div>
+                </div>
+            </section>
+
+            <!-- Metrics Section -->
+            <section class="card metrics">
+                <h2><i class="icon-stats"></i> Live Metrics</h2>
+                <div class="metrics-grid">
+                    <div class="metric-item">
+                        <span class="label">Total Received</span>
+                        <span class="value" id="totalReceived">0</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="label">Total Dropped</span>
+                        <span class="value danger" id="totalDropped">0</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="label">Current Level</span>
+                        <span class="value" id="currentLevel">0</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="label">Output Rate</span>
+                        <span class="value success" id="outputRate">0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chart Section -->
+            <section class="card chart-section">
+                <h2><i class="icon-chart"></i> Real-time Traffic</h2>
+                <div class="chart-container">
+                    <canvas id="trafficChart"></canvas>
+                </div>
+            </section>
+        </div>
+
+        <!-- Explanation Section -->
+        <section class="card explanation">
+            <h2>How it Works</h2>
+            <div class="explanation-content">
+                <div class="explanation-text">
+                    <p>The <strong>Leaky Bucket Algorithm</strong> is a congestion control mechanism used in networks to shape traffic. It ensures that data is transmitted at a constant, predictable rate, regardless of the burstiness of incoming traffic.</p>
+                    <p>Imagine a bucket with a small hole at the bottom. Water (packets) enters the bucket at varying rates. If the water enters faster than it can leak out, the bucket fills up. If the bucket becomes full, any additional water overflows (packets are dropped). The water always leaves the bucket at a constant rate through the hole.</p>
+                </div>
+                <div class="explanation-features">
+                    <div class="feature">
+                        <h3>Advantages</h3>
+                        <ul>
+                            <li>Smooths out bursty traffic.</li>
+                            <li>Ensures a constant output rate.</li>
+                            <li>Prevents network congestion.</li>
+                        </ul>
+                    </div>
+                    <div class="feature">
+                        <h3>Limitations</h3>
+                        <ul>
+                            <li>Packets are lost if the bucket overflows.</li>
+                            <li>Does not allow for bursts even if bandwidth is available.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
